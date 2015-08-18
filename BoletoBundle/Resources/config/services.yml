@@ -1,0 +1,25 @@
+# BoletoBundle/Resources/config/services.yml
+parameters:
+#   boleto_url: "https://www.boletobancario.com/boletofacil/integration/api/v1/issue-charge?token=1B544D5E53391EB76C70DA66689ED4CE235CBB1AC74F516FD6D22D2C8B9BC6E0&"
+    boleto_url: "https://www.boletobancario.com/boletofacil/integration/api/v1/"
+    boleto_token: "1B544D5E53391EB76C70DA66689ED4CE235CBB1AC74F516FD6D22D2C8B9BC6E0"
+    boleto_amb: false        # define o ambiente para geração de boleto: 1(true) = teste; 0(false) = real
+    boleto_due_date_days: 5 #standard number of days for due date from the createion of the invoice
+
+services:
+    boleto.ConnectionClient:
+        class: BoletoBundle\Classes\BoletoConnectionClient
+        arguments: [%boleto_url%, %boleto_token%, @monolog.logger]
+
+    boleto.BoletoManager:
+            class:        BoletoBundle\Classes\BoletoManager
+            arguments:    [@doctrine.orm.default_entity_manager, @monolog.logger, @boleto.BoletoCharge, @boleto.BoletoPayment]
+
+    boleto.BoletoCharge:
+            class:        BoletoBundle\Classes\BoletoCharge
+            arguments:    [@doctrine.orm.default_entity_manager, @monolog.logger, @boleto.ConnectionClient, %boleto_amb%, %boleto_due_date_days%,  @event_dispatcher]
+
+    boleto.BoletoPayment:
+            class:        BoletoBundle\Classes\BoletoPayment
+            arguments:    [@doctrine.orm.default_entity_manager, @monolog.logger, @boleto.ConnectionClient, %boleto_amb%, @boleto.BoletoCharge]
+

@@ -1,0 +1,160 @@
+<?php
+
+namespace BoletoBundle\Entity;;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Subscription
+ *
+ * @ORM\Table(name="boleto_payment_notification")
+ * @ORM\Entity
+ */
+class Payment_Notification
+{
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;          // Número único para uma notificação de pagamento
+
+    /**
+     * @var \BoletoBundle\Entity\Charge
+     * @ORM\ManyToOne(targetEntity="BoletoBundle\Entity\Charge")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="code_charge", referencedColumnName="code")
+     * })
+     */
+    private $Charge;
+
+    /**
+     * @var \String
+     *
+     * @ORM\Column(name="charge_Reference", type="string", nullable=false)
+     */
+    private $chargeReference;     // código de referência usado na geração da cobrança = id_user
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_Token", type="string", nullable=false)
+     */
+
+    private $paymentToken;       // Token que identifica o pagamento no BoletoFácil
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_dt_tm", type="datetime", nullable=false)
+     */
+
+    private $updateDtTm;    // Data de atualização/inserção dos dados
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set chargeReference
+     *
+     * @param string $chargeReference
+     * @return Payment_Notification
+     */
+    public function setChargeReference($chargeReference)
+    {
+        $this->chargeReference = $chargeReference;
+
+        return $this;
+    }
+
+    /**
+     * Get chargeReference
+     *
+     * @return string 
+     */
+    public function getChargeReference()
+    {
+        return $this->chargeReference;
+    }
+
+    /**
+     * Set paymentToken
+     *
+     * @param string $paymentToken
+     * @return Payment_Notification
+     */
+    public function setPaymentToken($paymentToken)
+    {
+        $this->paymentToken = $paymentToken;
+
+        return $this;
+    }
+
+    /**
+     * Get paymentToken
+     *
+     * @return string 
+     */
+    public function getPaymentToken()
+    {
+        return $this->paymentToken;
+    }
+
+    /**
+     * Set updateDtTm
+     *
+     * @param \DateTime $updateDtTm
+     * @return Payment_Notification
+     */
+    public function setUpdateDtTm($updateDtTm)
+    {
+        $this->updateDtTm = $updateDtTm;
+
+        return $this;
+    }
+
+    /**
+     * Get updateDtTm
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateDtTm()
+    {
+        return $this->updateDtTm;
+    }
+
+    /**
+     * Set Charge
+     *
+     * @param \BoletoBundle\Entity\Charge $charge
+     * @return Payment_Notification
+     */
+    public function setCharge(\BoletoBundle\Entity\Charge $charge = null)
+    {
+        $this->Charge = $charge;
+
+        return $this;
+    }
+
+    /**
+     * Get Charge
+     *
+     * @return \BoletoBundle\Entity\Charge 
+     */
+    public function getCharge()
+    {
+        return $this->Charge;
+    }
+}
